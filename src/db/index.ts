@@ -17,6 +17,9 @@ const client = createClient({
 // Create the Drizzle database instance
 export const db = drizzle(client, { schema });
 
+// Export client for raw SQL queries if needed
+export { client };
+
 // Export schema for use in other files
 export * from "./schema";
 

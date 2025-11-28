@@ -4,8 +4,7 @@
  * Or manually: npx tsx src/db/test-connection.ts
  */
 
-import { db } from "./index";
-import { sql } from "drizzle-orm";
+import { client } from "./index";
 
 async function testConnection() {
   try {
@@ -14,18 +13,18 @@ async function testConnection() {
     console.log(`📁 Database URL: ${dbUrl}`);
     
     // Test basic connection
-    const result = await db.execute(sql`SELECT 1 as test`);
+    const result = await client.execute("SELECT 1 as test");
     console.log("✅ Database connection successful!");
     console.log("📊 Test query result:", result);
     
     // Check if tables exist
-    const tables = await db.execute(
-      sql`SELECT name FROM sqlite_master WHERE type='table' ORDER BY name`
+    const tables = await client.execute(
+      "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name"
     );
     console.log("\n📋 Existing tables:");
-    if (Array.isArray(tables) && tables.length > 0) {
-      tables.forEach((table: any) => {
-        console.log(`  - ${table.name}`);
+    if (tables.rows && tables.rows.length > 0) {
+      tables.rows.forEach((row: any) => {
+        console.log(`  - ${row.name}`);
       });
     } else {
       console.log("  (No tables found)");

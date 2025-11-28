@@ -403,20 +403,20 @@ export default function ReceiptDetail({ saleId }: { saleId: string }) {
               sale.paymentDetails &&
               typeof sale.paymentDetails === "object" &&
               "parts" in sale.paymentDetails &&
-              Array.isArray(sale.paymentDetails.parts) && (
+              Array.isArray((sale.paymentDetails as { parts: unknown[] }).parts) ? (
                 <div className="mt-2">
                   <p className="text-muted-foreground mb-1">
                     Payment Breakdown:
                   </p>
-                  {sale.paymentDetails.parts.map(
-                    (part: any, idx: number) => (
+                  {((sale.paymentDetails as { parts: Array<{ method: string; amount: number }> }).parts).map(
+                    (part, idx) => (
                       <p key={idx} className="text-xs">
                         {part.method}: {formatCurrency(part.amount)}
                       </p>
                     )
                   )}
                 </div>
-              )}
+              ) : null}
           </div>
         </div>
 

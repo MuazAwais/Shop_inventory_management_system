@@ -42,8 +42,8 @@ export async function POST(request: NextRequest) {
       password,
       name,
       role,
-      branchId: branchId || null,
-      phone: phone || null,
+      branchId: branchId || undefined,
+      phone: phone || undefined,
     });
 
     return successResponse(

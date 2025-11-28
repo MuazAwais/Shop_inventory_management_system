@@ -1,14 +1,12 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import { 
   TrendingUp, 
   ShoppingCart, 
   DollarSign, 
   Package,
-  FileText,
-  Calendar
+  FileText
 } from "lucide-react";
 
 export default function ReportsDashboard() {
