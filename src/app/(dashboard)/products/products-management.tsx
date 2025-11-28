@@ -154,20 +154,45 @@ export default function ProductsManagement() {
         : "/api/products";
       const method = editingProduct ? "PATCH" : "POST";
 
+      // Helper function to safely parse numbers
+      const safeParseFloat = (value: string, defaultValue: number = 0): number => {
+        if (!value || value.trim() === "") return defaultValue;
+        const parsed = parseFloat(value);
+        return isNaN(parsed) ? defaultValue : parsed;
+      };
+
+      const safeParseInt = (value: string, defaultValue: number = 0): number => {
+        if (!value || value.trim() === "") return defaultValue;
+        const parsed = parseInt(value, 10);
+        return isNaN(parsed) ? defaultValue : parsed;
+      };
+
+      const safeParseIntNullable = (value: string): number | null => {
+        if (!value || value.trim() === "") return null;
+        const parsed = parseInt(value, 10);
+        return isNaN(parsed) ? null : parsed;
+      };
+
+      const safeParseFloatNullable = (value: string): number | null => {
+        if (!value || value.trim() === "") return null;
+        const parsed = parseFloat(value);
+        return isNaN(parsed) ? null : parsed;
+      };
+
       const payload: any = {
         code: formData.code,
         barcode: formData.barcode || null,
         nameEn: formData.nameEn,
         nameUr: formData.nameUr || null,
-        brandId: formData.brandId ? parseInt(formData.brandId) : null,
-        categoryId: formData.categoryId ? parseInt(formData.categoryId) : null,
+        brandId: safeParseIntNullable(formData.brandId),
+        categoryId: safeParseIntNullable(formData.categoryId),
         modelCompatibility: formData.modelCompatibility || null,
-        purchasePrice: parseFloat(formData.purchasePrice),
-        sellingPrice: parseFloat(formData.sellingPrice),
-        wholesalePrice: formData.wholesalePrice ? parseFloat(formData.wholesalePrice) : null,
-        gstPercent: parseFloat(formData.gstPercent),
-        stockQty: parseFloat(formData.stockQty),
-        minStockLevel: parseInt(formData.minStockLevel),
+        purchasePrice: safeParseFloat(formData.purchasePrice, 0),
+        sellingPrice: safeParseFloat(formData.sellingPrice, 0),
+        wholesalePrice: safeParseFloatNullable(formData.wholesalePrice),
+        gstPercent: safeParseFloat(formData.gstPercent, 17),
+        stockQty: safeParseFloat(formData.stockQty, 0),
+        minStockLevel: safeParseInt(formData.minStockLevel, 5),
         status: formData.status,
         notes: formData.notes || null,
       };
@@ -342,16 +367,16 @@ export default function ProductsManagement() {
                   Category
                 </label>
                 <Select
-                  value={formData.categoryId}
+                  value={formData.categoryId || undefined}
                   onValueChange={(value) =>
-                    setFormData({ ...formData, categoryId: value })
+                    setFormData({ ...formData, categoryId: value === "none" ? "" : value })
                   }
                 >
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Select Category" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">None</SelectItem>
+                    <SelectItem value="none">None</SelectItem>
                     {categories.map((cat) => (
                       <SelectItem key={cat.id} value={cat.id.toString()}>
                         {cat.nameEn || "N/A"}
@@ -365,16 +390,16 @@ export default function ProductsManagement() {
                   Brand
                 </label>
                 <Select
-                  value={formData.brandId}
+                  value={formData.brandId || undefined}
                   onValueChange={(value) =>
-                    setFormData({ ...formData, brandId: value })
+                    setFormData({ ...formData, brandId: value === "none" ? "" : value })
                   }
                 >
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Select Brand" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">None</SelectItem>
+                    <SelectItem value="none">None</SelectItem>
                     {brands.map((brand) => (
                       <SelectItem key={brand.id} value={brand.id.toString()}>
                         {brand.nameEn || "N/A"}
