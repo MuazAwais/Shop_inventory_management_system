@@ -59,6 +59,7 @@ export default function SalesPos() {
   const [transferReference, setTransferReference] = useState("");
   const [fbrInvoiceNumber, setFbrInvoiceNumber] = useState<string>("");
   const [customerId, setCustomerId] = useState<string>(""); // optional, can be wired later
+  const [customerName, setCustomerName] = useState<string>(""); // optional customer name for receipt
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
@@ -305,6 +306,7 @@ export default function SalesPos() {
       // Branch will be inferred from authenticated user in the API; provide a placeholder
       branchId: 1,
       customerId: customerId ? Number(customerId) : undefined,
+      customerName: customerName && customerName.trim() ? customerName.trim() : undefined,
       invoiceNo,
       items: items.map((item) => ({
         productId: item.productId,
@@ -770,7 +772,22 @@ export default function SalesPos() {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Customer (optional, ID)
+                Customer Name (optional)
+              </label>
+              <input
+                type="text"
+                value={customerName}
+                onChange={(e) => setCustomerName(e.target.value)}
+                placeholder="Enter customer name for receipt"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none text-sm"
+              />
+              <p className="text-xs text-gray-500 mt-1">
+                Or enter Customer ID below if customer exists in system
+              </p>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Customer ID (optional)
               </label>
               <input
                 type="number"

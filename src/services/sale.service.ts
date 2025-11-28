@@ -56,6 +56,7 @@ export class SaleService {
   static async createSale(data: {
     branchId: number;
     customerId?: number;
+    customerName?: string;
     invoiceNo: string;
     items: Array<{
       productId: number;
@@ -145,6 +146,7 @@ export class SaleService {
         .values({
           branchId: data.branchId,
           customerId: data.customerId || null,
+          customerName: data.customerName || null,
           invoiceNo: data.invoiceNo,
           saleDate: new Date(), // Drizzle timestamp mode expects a Date object
           subtotal,

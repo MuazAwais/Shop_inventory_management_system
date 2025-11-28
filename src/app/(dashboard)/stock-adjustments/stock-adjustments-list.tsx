@@ -171,15 +171,52 @@ export default function StockAdjustmentsList() {
     setError("");
 
     try {
+      // Validate required fields
+      if (!formData.productId || formData.productId === "") {
+        setError("Product is required");
+        setSubmitting(false);
+        return;
+      }
+
+      if (!formData.qtyChange || formData.qtyChange === "") {
+        setError("Quantity change is required");
+        setSubmitting(false);
+        return;
+      }
+
+      if (!formData.reason || formData.reason === "") {
+        setError("Reason is required");
+        setSubmitting(false);
+        return;
+      }
+
+      // Parse and validate qtyChange (must be integer)
+      const qtyChange = parseInt(formData.qtyChange, 10);
+      if (isNaN(qtyChange) || qtyChange === 0) {
+        setError("Quantity change must be a non-zero integer");
+        setSubmitting(false);
+        return;
+      }
+
+      const productId = parseInt(formData.productId, 10);
+      if (isNaN(productId)) {
+        setError("Invalid product selected");
+        setSubmitting(false);
+        return;
+      }
+
       const payload: any = {
-        productId: parseInt(formData.productId),
-        qtyChange: parseInt(formData.qtyChange),
+        productId: productId,
+        qtyChange: qtyChange,
         reason: formData.reason,
         notes: formData.notes || null,
       };
 
-      if (formData.branchId) {
-        payload.branchId = parseInt(formData.branchId);
+      if (formData.branchId && formData.branchId !== "") {
+        const branchId = parseInt(formData.branchId, 10);
+        if (!isNaN(branchId)) {
+          payload.branchId = branchId;
+        }
       }
 
       const response = await fetch("/api/stock-adjustments", {
@@ -199,12 +236,13 @@ export default function StockAdjustmentsList() {
           reason: "",
           notes: "",
         });
+        setError("");
         fetchAdjustments();
       } else {
-        setError(data.error || "Failed to create stock adjustment");
+        setError(data.error || data.message || "Failed to create stock adjustment");
       }
-    } catch (err) {
-      setError("An error occurred while creating stock adjustment");
+    } catch (err: any) {
+      setError(err.message || "An error occurred while creating stock adjustment");
     } finally {
       setSubmitting(false);
     }
@@ -270,6 +308,11 @@ export default function StockAdjustmentsList() {
       {showForm && (
         <div className="bg-white p-6 rounded-lg shadow mb-6">
           <h2 className="text-xl font-semibold mb-4">Create Stock Adjustment</h2>
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4">
+              {error}
+            </div>
+          )}
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -318,6 +361,7 @@ export default function StockAdjustmentsList() {
                 <input
                   type="number"
                   required
+                  step="1"
                   value={formData.qtyChange}
                   onChange={(e) =>
                     setFormData({ ...formData, qtyChange: e.target.value })
@@ -326,7 +370,7 @@ export default function StockAdjustmentsList() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none"
                 />
                 <p className="text-xs text-gray-500 mt-1">
-                  Use positive number to increase stock, negative to decrease
+                  Use positive number to increase stock, negative to decrease (e.g., +5 or -3)
                 </p>
               </div>
               <div>

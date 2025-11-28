@@ -56,13 +56,25 @@ export default function PurchaseDetail({ purchaseId }: { purchaseId: string }) {
   const [error, setError] = useState("");
 
   useEffect(() => {
+    // Check if purchaseId is a valid number
+    const id = parseInt(purchaseId);
+    if (isNaN(id)) {
+      setError("Invalid purchase ID");
+      setLoading(false);
+      return;
+    }
     fetchPurchase();
   }, [purchaseId]);
 
   const fetchPurchase = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`/api/purchases/${purchaseId}`);
+      const id = parseInt(purchaseId);
+      if (isNaN(id)) {
+        setError("Invalid purchase ID");
+        return;
+      }
+      const response = await fetch(`/api/purchases/${id}`);
       const data = await response.json();
 
       if (data.success) {

@@ -45,8 +45,8 @@ export async function getStockAdjustmentsByProduct(productId: number, limit: num
 export async function getStockAdjustmentsWithFilters(filters: {
   branchId?: number;
   productId?: number;
-  startDate?: number; // Unix timestamp
-  endDate?: number; // Unix timestamp
+  startDate?: Date; // Date object - Drizzle will convert to timestamp
+  endDate?: Date; // Date object - Drizzle will convert to timestamp
   limit?: number;
 }) {
   const conditions = [];
@@ -59,11 +59,11 @@ export async function getStockAdjustmentsWithFilters(filters: {
     conditions.push(eq(stockAdjustments.productId, filters.productId));
   }
 
-  if (filters.startDate !== undefined) {
+  if (filters.startDate !== undefined && filters.startDate !== null) {
     conditions.push(gte(stockAdjustments.createdAt, filters.startDate));
   }
 
-  if (filters.endDate !== undefined) {
+  if (filters.endDate !== undefined && filters.endDate !== null) {
     conditions.push(lte(stockAdjustments.createdAt, filters.endDate));
   }
 

@@ -26,6 +26,7 @@ interface Sale {
   id: number;
   branchId: number | null;
   customerId: number | null;
+  customerName: string | null;
   invoiceNo: string | null;
   saleDate: number | null;
   subtotal: number | null;
@@ -263,29 +264,38 @@ export default function ReceiptDetail({ saleId }: { saleId: string }) {
         </div>
 
         {/* Customer Info */}
-        {customer && (
+        {(customer || sale.customerName) && (
           <div className="mb-6 p-3 bg-muted rounded-md text-sm">
             <p className="font-semibold mb-2">Customer Details:</p>
-            <p>
-              <span className="text-muted-foreground">Name:</span>{" "}
-              {customer.name || "N/A"}
-            </p>
-            {customer.phone && (
+            {customer ? (
+              <>
+                <p>
+                  <span className="text-muted-foreground">Name:</span>{" "}
+                  {customer.name || "N/A"}
+                </p>
+                {customer.phone && (
+                  <p>
+                    <span className="text-muted-foreground">Phone:</span>{" "}
+                    {customer.phone}
+                  </p>
+                )}
+                {customer.cnic && (
+                  <p>
+                    <span className="text-muted-foreground">CNIC:</span>{" "}
+                    {customer.cnic}
+                  </p>
+                )}
+                {customer.address && (
+                  <p>
+                    <span className="text-muted-foreground">Address:</span>{" "}
+                    {customer.address}
+                  </p>
+                )}
+              </>
+            ) : (
               <p>
-                <span className="text-muted-foreground">Phone:</span>{" "}
-                {customer.phone}
-              </p>
-            )}
-            {customer.cnic && (
-              <p>
-                <span className="text-muted-foreground">CNIC:</span>{" "}
-                {customer.cnic}
-              </p>
-            )}
-            {customer.address && (
-              <p>
-                <span className="text-muted-foreground">Address:</span>{" "}
-                {customer.address}
+                <span className="text-muted-foreground">Name:</span>{" "}
+                {sale.customerName || "N/A"}
               </p>
             )}
           </div>

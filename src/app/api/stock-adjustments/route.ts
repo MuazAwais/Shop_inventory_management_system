@@ -48,16 +48,50 @@ export async function GET(request: NextRequest) {
     }
 
     if (startDate) {
-      const date = new Date(startDate);
-      if (!isNaN(date.getTime())) {
-        filters.startDate = date;
+      try {
+        // Parse date string (format: YYYY-MM-DD)
+        // Create date in local timezone to avoid UTC issues
+        const [year, month, day] = startDate.split('-').map(Number);
+        if (year && month && day) {
+          const date = new Date(year, month - 1, day, 0, 0, 0, 0); // month is 0-indexed
+          if (!isNaN(date.getTime())) {
+            filters.startDate = date;
+          }
+        } else {
+          // Fallback to standard Date parsing
+          const date = new Date(startDate);
+          if (!isNaN(date.getTime())) {
+            date.setHours(0, 0, 0, 0);
+            filters.startDate = date;
+          }
+        }
+      } catch (err) {
+        // Invalid date format, skip this filter
+        console.error("Invalid startDate format:", startDate);
       }
     }
 
     if (endDate) {
-      const date = new Date(endDate);
-      if (!isNaN(date.getTime())) {
-        filters.endDate = date;
+      try {
+        // Parse date string (format: YYYY-MM-DD)
+        // Create date in local timezone to avoid UTC issues
+        const [year, month, day] = endDate.split('-').map(Number);
+        if (year && month && day) {
+          const date = new Date(year, month - 1, day, 23, 59, 59, 999); // month is 0-indexed
+          if (!isNaN(date.getTime())) {
+            filters.endDate = date;
+          }
+        } else {
+          // Fallback to standard Date parsing
+          const date = new Date(endDate);
+          if (!isNaN(date.getTime())) {
+            date.setHours(23, 59, 59, 999);
+            filters.endDate = date;
+          }
+        }
+      } catch (err) {
+        // Invalid date format, skip this filter
+        console.error("Invalid endDate format:", endDate);
       }
     }
 
@@ -71,10 +105,11 @@ export async function GET(request: NextRequest) {
     const adjustments = await StockAdjustmentService.getStockAdjustmentsWithFilters(filters);
     return successResponse(adjustments);
   } catch (error: any) {
-    if (error.message.includes("Unauthorized")) {
+    if (error.message && error.message.includes("Unauthorized")) {
       return unauthorizedResponse("Authentication required");
     }
-    return errorResponse(error);
+    console.error("Error fetching stock adjustments:", error);
+    return errorResponse(error, error.message || "Failed to fetch stock adjustments");
   }
 }
 
@@ -113,9 +148,10 @@ export async function POST(request: NextRequest) {
 
     return successResponse(adjustment, "Stock adjustment created successfully", 201);
   } catch (error: any) {
-    if (error.message.includes("Unauthorized")) {
+    if (error.message && error.message.includes("Unauthorized")) {
       return unauthorizedResponse("Authentication required");
     }
+    console.error("Error creating stock adjustment:", error);
     return errorResponse(error, error.message || "Failed to create stock adjustment", 400);
   }
 }

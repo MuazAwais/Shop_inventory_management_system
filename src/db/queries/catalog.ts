@@ -97,7 +97,29 @@ export async function deleteBrand(id: number) {
  */
 
 export async function getAllProducts() {
-  return await db.select().from(products);
+  return await db
+    .select({
+      id: products.id,
+      code: products.code,
+      barcode: products.barcode,
+      nameEn: products.nameEn,
+      nameUr: products.nameUr,
+      brandId: products.brandId,
+      brandNameEn: brands.nameEn,
+      categoryId: products.categoryId,
+      modelCompatibility: products.modelCompatibility,
+      purchasePrice: products.purchasePrice,
+      sellingPrice: products.sellingPrice,
+      wholesalePrice: products.wholesalePrice,
+      gstPercent: products.gstPercent,
+      stockQty: products.stockQty,
+      minStockLevel: products.minStockLevel,
+      status: products.status,
+      notes: products.notes,
+    })
+    .from(products)
+    .leftJoin(brands, eq(products.brandId, brands.id))
+    .where(eq(products.status, "active"));
 }
 
 export async function createProduct(data: typeof products.$inferInsert) {

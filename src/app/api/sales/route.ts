@@ -45,6 +45,7 @@ export async function POST(request: NextRequest) {
     const sale = await SaleService.createSale({
       branchId,
       customerId: body.customerId ?? undefined,
+      customerName: body.customerName ?? undefined,
       invoiceNo: body.invoiceNo,
       items: body.items,
       paymentMethod: body.paymentMethod,

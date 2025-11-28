@@ -58,12 +58,12 @@ export class StockAdjustmentService {
       limit: filters.limit || 100,
     };
 
-    // Convert dates to Unix timestamps
+    // Pass Date objects directly - Drizzle will handle timestamp conversion
     if (filters.startDate) {
-      filterParams.startDate = Math.floor(filters.startDate.getTime() / 1000);
+      filterParams.startDate = filters.startDate;
     }
     if (filters.endDate) {
-      filterParams.endDate = Math.floor(filters.endDate.getTime() / 1000);
+      filterParams.endDate = filters.endDate;
     }
 
     return await getStockAdjustmentsWithFilters(filterParams);
@@ -101,7 +101,7 @@ export class StockAdjustmentService {
         reason: data.reason,
         notes: data.notes || null,
         adjustedBy: data.adjustedBy,
-        createdAt: Math.floor(Date.now() / 1000), // Unix timestamp
+        createdAt: new Date(), // Date object - Drizzle will convert to timestamp
       },
     });
   }

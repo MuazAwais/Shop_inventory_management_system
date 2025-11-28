@@ -138,6 +138,7 @@ export const sales = sqliteTable("sales", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   branchId: integer("branch_id").references(() => branches.id),
   customerId: integer("customer_id").references(() => customers.id),
+  customerName: text("customer_name", { length: 200 }), // Optional customer name for receipt printing
   invoiceNo: text("invoice_no", { length: 100 }),
   saleDate: integer("sale_date", { mode: "timestamp" }), // DateTime stored as timestamp
   subtotal: real("subtotal"),

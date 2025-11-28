@@ -35,8 +35,27 @@ export async function getProductsByCategory(categoryId: number) {
 
 export async function searchProducts(query: string) {
   return await db
-    .select()
+    .select({
+      id: products.id,
+      code: products.code,
+      barcode: products.barcode,
+      nameEn: products.nameEn,
+      nameUr: products.nameUr,
+      brandId: products.brandId,
+      brandNameEn: brands.nameEn,
+      categoryId: products.categoryId,
+      modelCompatibility: products.modelCompatibility,
+      purchasePrice: products.purchasePrice,
+      sellingPrice: products.sellingPrice,
+      wholesalePrice: products.wholesalePrice,
+      gstPercent: products.gstPercent,
+      stockQty: products.stockQty,
+      minStockLevel: products.minStockLevel,
+      status: products.status,
+      notes: products.notes,
+    })
     .from(products)
+    .leftJoin(brands, eq(products.brandId, brands.id))
     .where(
       and(
         eq(products.status, "active"),

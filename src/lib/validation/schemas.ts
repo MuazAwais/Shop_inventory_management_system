@@ -136,6 +136,7 @@ export const saleSchemas = {
   create: yup.object({
     branchId: yup.number().integer().positive().required("Branch ID is required"),
     customerId: yup.number().integer().positive().nullable(),
+    customerName: yup.string().max(200).nullable(),
     invoiceNo: yup.string().required("Invoice number is required"),
     items: yup
       .array()
