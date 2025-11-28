@@ -13,7 +13,7 @@
   min-height: 100vh;
   align-items: center;
   justify-content: center;
-  font-family: var(--font-geist-sans);
+  font-family: var(--font-inter, system-ui, -apple-system, sans-serif);
   background-color: var(--background);
 }
 
@@ -69,7 +69,9 @@
   font-size: 14px;
 }
 
-.ctas a {
+.ctas a,
+.ctas .primary,
+.ctas .secondary {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -81,26 +83,28 @@
   cursor: pointer;
   width: fit-content;
   font-weight: 500;
+  text-decoration: none;
 }
 
-a.primary {
+.primary {
   background: var(--text-primary);
   color: var(--background);
   gap: 8px;
 }
 
-a.secondary {
+.secondary {
   border-color: var(--button-secondary-border);
+  color: var(--text-primary);
 }
 
 /* Enable hover only on non-touch devices */
 @media (hover: hover) and (pointer: fine) {
-  a.primary:hover {
+  .primary:hover {
     background: var(--button-primary-hover);
     border-color: transparent;
   }
 
-  a.secondary:hover {
+  .secondary:hover {
     background: var(--button-secondary-hover);
     border-color: transparent;
   }

@@ -1,42 +1,209 @@
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 221.2 83.2% 53.3%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 224.3 76.3% 48%;
   }
 }
 
-html,
-body {
-  max-width: 100vw;
-  overflow-x: hidden;
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+/* Print styles for receipts */
+@media print {
+  /* 80mm thermal printer page size - MUST be set for thermal printers */
+  @page {
+    size: 80mm auto;
+    margin: 2mm 1mm;
+    padding: 0mm;
+  }
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
+  html, body {
+    width: 80mm !important;
+    max-width: 80mm !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: white !important;
+  }
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
+  /* Force all containers to respect 80mm width */
+  body > * {
+    max-width: 80mm !important;
+  }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
+  .print\\:hidden {
+    display: none !important;
+  }
+
+  /* Hide navigation and other UI elements when printing */
+  nav {
+    display: none !important;
+  }
+
+  /* Hide main container padding when printing */
+  main {
+    padding: 0 !important;
+  }
+
+  .print\\:shadow-none {
+    box-shadow: none !important;
+  }
+
+  .print\\:border-0 {
+    border: none !important;
+  }
+
+  /* 80mm Thermal Printer Styles */
+  .receipt-80mm {
+    width: 78mm !important;
+    max-width: 78mm !important;
+    margin: 0 auto !important;
+    padding: 2mm 1mm !important;
+    font-size: 10px !important;
+    line-height: 1.2 !important;
+    font-family: 'Courier New', monospace !important;
+  }
+
+  .receipt-80mm * {
+    font-family: 'Courier New', monospace !important;
+  }
+
+  .receipt-80mm h1 {
+    font-size: 14px !important;
+    margin: 2px 0 !important;
+    font-weight: bold !important;
+  }
+
+  .receipt-80mm h2,
+  .receipt-80mm h3 {
+    font-size: 11px !important;
+    margin: 2px 0 !important;
+  }
+
+  .receipt-80mm p {
+    margin: 1px 0 !important;
+    font-size: 9px !important;
+  }
+
+  .receipt-80mm table {
+    width: 100% !important;
+    font-size: 8px !important;
+    border-collapse: collapse !important;
+    margin: 3px 0 !important;
+  }
+
+  .receipt-80mm table th {
+    padding: 1px !important;
+    font-size: 8px !important;
+    font-weight: bold !important;
+    border-bottom: 1px dashed #000 !important;
+  }
+
+  .receipt-80mm table td {
+    padding: 1px !important;
+    font-size: 8px !important;
+  }
+
+  .receipt-80mm .text-center {
+    text-align: center !important;
+  }
+
+  .receipt-80mm .text-right {
+    text-align: right !important;
+  }
+
+  .receipt-80mm .text-left {
+    text-align: left !important;
+  }
+
+  .receipt-80mm .font-bold,
+  .receipt-80mm .font-semibold {
+    font-weight: bold !important;
+  }
+
+  .receipt-80mm .border-b {
+    border-bottom: 1px dashed #000 !important;
+  }
+
+  .receipt-80mm .border-t {
+    border-top: 1px dashed #000 !important;
+  }
+
+  .receipt-80mm img {
+    max-width: 40mm !important;
+    max-height: 15mm !important;
+  }
+
+  .receipt-80mm .space-y-2 > * + * {
+    margin-top: 2px !important;
+  }
+
+  .receipt-80mm .space-y-4 > * + * {
+    margin-top: 3px !important;
+  }
+
+  .receipt-80mm .mb-6 {
+    margin-bottom: 4px !important;
+  }
+
+  .receipt-80mm .mb-4 {
+    margin-bottom: 3px !important;
+  }
+
+  .receipt-80mm .p-3 {
+    padding: 2px !important;
+  }
+
+  .receipt-80mm .p-8 {
+    padding: 3mm 2mm !important;
   }
 }

@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=${DATABASE_URL:-file:./local.db}
+      - TURSO_AUTH_TOKEN=${TURSO_AUTH_TOKEN:-}
+      - SESSION_SECRET=${SESSION_SECRET:-change-me-in-production}
+    volumes:
+      # Mount database file if using local SQLite
+      - ./local.db:/app/local.db
+    restart: unless-stopped
+

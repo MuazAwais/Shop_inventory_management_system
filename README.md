@@ -29,8 +29,21 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+## Deployment
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+This project is ready for deployment on various platforms. See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed deployment instructions.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Quick Deploy Options:
+
+1. **Vercel** (Recommended): Connect your GitHub repo to Vercel for automatic deployments
+2. **Docker**: Use the included `Dockerfile` for containerized deployments
+3. **Railway/Render**: Follow platform-specific Next.js deployment guides
+
+### Environment Variables:
+
+Copy `env.example` to `.env.local` and configure:
+- `DATABASE_URL` - Database connection string
+- `TURSO_AUTH_TOKEN` - Required if using Turso cloud database
+- `SESSION_SECRET` - Secret key for session encryption
+
+See [DEPLOYMENT.md](./DEPLOYMENT.md) for complete deployment guide.
