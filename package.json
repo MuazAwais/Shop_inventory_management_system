@@ -10,8 +10,8 @@
     "db:generate": "drizzle-kit generate",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
-    "db:test": "tsx src/db/test-connection.ts",
-    "create-admin": "tsx src/scripts/create-admin.ts"
+    "db:migrate": "tsx scripts/apply-migration-to-turso.ts",
+    "create-admin": "tsx scripts/insert-admin-turso.ts"
   },
   "dependencies": {
     "@libsql/client": "^0.14.0",

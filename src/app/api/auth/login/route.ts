@@ -59,8 +59,17 @@ export async function POST(request: NextRequest) {
       },
       "Login successful"
     );
-  } catch (error) {
-    return errorResponse(error);
+  } catch (error: any) {
+    console.error("Login API error:", error);
+    // Check if it's a database error
+    if (error.message?.includes("no such table")) {
+      return errorResponse(
+        error,
+        "Database tables not found. Please run: npm run db:migrate",
+        500
+      );
+    }
+    return errorResponse(error, error.message || "An error occurred during login");
   }
 }
 

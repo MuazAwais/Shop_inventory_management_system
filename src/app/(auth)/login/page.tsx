@@ -32,10 +32,11 @@ export default function LoginPage() {
         router.push("/dashboard");
         router.refresh();
       } else {
-        setError(data.error || "Login failed");
+        setError(data.error || data.message || "Login failed");
       }
-    } catch {
-      setError("An error occurred. Please try again.");
+    } catch (err: any) {
+      console.error("Login error:", err);
+      setError(err.message || "An error occurred. Please try again.");
     } finally {
       setLoading(false);
     }

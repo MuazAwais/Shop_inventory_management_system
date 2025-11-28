@@ -2,9 +2,7 @@
 
 ## Creating an Admin User
 
-There are two ways to create an admin user:
-
-### Method 1: Using the Script (Recommended)
+### Using the Script (Recommended)
 
 Run the admin creation script:
 
@@ -14,7 +12,7 @@ npm run create-admin
 
 This will create an admin user with default credentials:
 - **Username:** `admin`
-- **Password:** `admin123`
+- **Password:** `Admin@123`
 - **Name:** `Administrator`
 
 **Custom credentials:**
@@ -24,23 +22,10 @@ npm run create-admin <username> <password> <name>
 
 Example:
 ```bash
-npm run create-admin myadmin mypassword123 "My Admin"
+npm run create-admin myadmin MyPassword123 "My Admin"
 ```
 
-### Method 2: Using the Register Page
-
-1. Go to `/register` in your browser
-2. Fill in the registration form
-3. Select "Admin" from the Role dropdown
-4. Submit the form
-
-**Note:** The script method is recommended for the first admin user, as it ensures proper setup.
-
-## Default Admin Credentials
-
-After running the script, you can log in with:
-- **Username:** `admin`
-- **Password:** `admin123`
+**Note:** This script connects directly to your Turso database and requires `.env.local` to be configured with `DATABASE_URL` and `TURSO_AUTH_TOKEN`.
 
 ⚠️ **Important:** Change the password immediately after first login!
 
@@ -64,8 +49,9 @@ If you see this message, an admin user already exists. You can:
 ### "Failed to create admin user"
 Check:
 1. Database is running and accessible
-2. Database migrations have been applied (`npm run db:push`)
-3. No connection errors in the console
+2. Database migrations have been applied (`npm run db:migrate`)
+3. `.env.local` file exists with correct `DATABASE_URL` and `TURSO_AUTH_TOKEN`
+4. No connection errors in the console
 
 ## Security Notes
 
